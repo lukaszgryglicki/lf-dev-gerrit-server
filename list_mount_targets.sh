@@ -11,4 +11,9 @@ then
   echo "$0: cannot find volume-${1}.json.secret file"
   exit 2
 fi
-aws  --profile lfproduct-dev efs describe-mount-targets --file-system-id "${fsid}" | jq -r '.MountTargets[].MountTargetId'
+if [ -z "$VERBOSE" ]
+then
+  aws  --profile lfproduct-dev efs describe-mount-targets --file-system-id "${fsid}" | jq -r '.MountTargets[].MountTargetId'
+else
+  aws  --profile lfproduct-dev efs describe-mount-targets --file-system-id "${fsid}" | jq -r '.'
+fi

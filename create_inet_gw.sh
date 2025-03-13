@@ -27,11 +27,17 @@ then
   if [ ! -z "${vpcid}" ]
   then
     aws --profile lfproduct-dev ec2 attach-internet-gateway --internet-gateway-id "${igwid}" --vpc-id "${vpcid}"
+    res=$?
+    if [ ! "${res}" = "0" ]
+    then
+      echo "$0: attach inet gw failed"
+    fi
   fi
   aws --profile lfproduct-dev ec2 describe-internet-gateways --internet-gateway-id igw-02f93214b47847122 > describe-inet-gw.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
+    echo "$0: describe inet gw failed"
     rm -f "describe-inet-gw.json.secret"
   fi
 else

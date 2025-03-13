@@ -18,5 +18,11 @@ do
   sed -i "s|{{fs-${v}}}|${fsid}|g" ./task.json
 done
 aws --profile lfproduct-dev ecs register-task-definition --cli-input-json file://task.json > task.json.secret
+res=$?
+if [ ! "${res}" = "0" ]
+then
+  echo "$0: register task definition failed"
+  exit 3
+fi
 taskarn=$(cat task.json.secret | jq -r '.taskDefinition.taskDefinitionArn')
 echo "task arn: ${taskarn}"

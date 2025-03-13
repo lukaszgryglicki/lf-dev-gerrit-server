@@ -1,5 +1,5 @@
 #!/bin/bash
-for arn in $(./list_tasks.sh)
+for arn in $(./list_task_definitions.sh)
 do
   echo "deleting task $arn"
   aws --profile lfproduct-dev ecs deregister-task-definition --task-definition "${arn}" > /dev/null

@@ -12,12 +12,14 @@ Gerrit Server for Dev use by LF
 - `` ./create_security_group.sh ``.
 - `` ./create_volumes.sh ``.
 - `` ./create_mount_targets.sh ``.
-- `` ./create_task.sh ``.
-
+- `` ./create_task_definition.sh ``.
+- `` ./create_service.sh ``.
 
 
 # Decommission
 
+- `` ./delete_service.sh ``.
+- `` ./delete_task_definition.sh ``.
 - `` ./delete_mount_targets.sh ``.
 - `` ./delete_volumes.sh ``.
 - `` ./delete_security_group.sh ``.

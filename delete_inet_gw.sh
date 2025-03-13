@@ -19,6 +19,11 @@ then
   if [ ! -z "${vpcid}" ]
   then
     aws --profile lfproduct-dev ec2 detach-internet-gateway --internet-gateway-id "${igwid}" --vpc-id "${vpcid}"
+    res=$?
+    if [ ! "${res}" = "0" ]
+    then
+      echo "detach inet gw result: ${res}"
+    fi
   fi
   aws --profile lfproduct-dev ec2 delete-internet-gateway --internet-gateway-id "${igwid}"
   res=$?
