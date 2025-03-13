@@ -2,59 +2,72 @@
   "family": "dev-gerrit-service",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "cpu": "2048",
-  "memory": "4096",
+  "cpu": "4096",
+  "memory": "8192",
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "dev_gerrit_openssh",
-      "image": "lscr.io/linuxserver/openssh-server:latest",
+      "name": "dev_gerrit_main",
+      "image": "gerritcodereview/gerrit",
       "essential": true,
       "portMappings": [
-        { "containerPort": 2222, "hostPort": 2222, "protocol": "tcp" }
+        { "containerPort": 8080, "hostPort": 8080, "protocol": "tcp" },
+        { "containerPort": 29418, "hostPort": 29418, "protocol": "tcp" }
       ],
       "mountPoints": [
           {
               "sourceVolume": "dev_gerrit_etc",
-              "containerPath": "/data/etc"
+              "containerPath": "/var/gerrit/etc"
           },
           {
               "sourceVolume": "dev_gerrit_lib",
-              "containerPath": "/data/lib"
+              "containerPath": "/var/gerrit/lib"
           },
           {
               "sourceVolume": "dev_gerrit_git",
-              "containerPath": "/data/git"
+              "containerPath": "/var/gerrit/git"
           },
           {
               "sourceVolume": "dev_gerrit_db",
-              "containerPath": "/data/db"
+              "containerPath": "/var/gerrit/db"
           },
           {
               "sourceVolume": "dev_gerrit_cache",
-              "containerPath": "/data/cache"
+              "containerPath": "/var/gerrit/cache"
           },
           {
               "sourceVolume": "dev_gerrit_index",
-              "containerPath": "/data/index"
+              "containerPath": "/var/gerrit/index"
           },
           {
               "sourceVolume": "dev_gerrit_plugins",
-              "containerPath": "/data/plugins"
+              "containerPath": "/var/gerrit/plugins"
           }
       ],
       "environment": [
           {
-              "name": "PASSWORD_ACCESS",
-              "value": "true"
+              "name": "HOST",
+              "value": "0.0.0.0"
           },
           {
-              "name": "USER_NAME",
-              "value": "{{username}}"
+              "name": "REINDEX_AT_STARTUP",
+              "value": "false"
           },
           {
-              "name": "USER_PASSWORD",
-              "value": "{{password}}"
+              "name": "CANONICAL_WEB_URL",
+              "value": "{{url}}"
+          },
+          {
+              "name": "PORT",
+              "value": "8080"
+          },
+          {
+              "name": "HTTPD_LISTEN_URL",
+              "value": "proxy-https://*:8080/"
+          },
+          {
+              "name": "GERRIT_INIT_ARGS",
+              "value": "--batch --no-auto-start"
           }
       ],
       "volumesFrom": [],
@@ -63,7 +76,7 @@
           "options": {
               "awslogs-group": "lf_dev_gerrit",
               "awslogs-region": "us-east-1",
-              "awslogs-stream-prefix": "lf-dev-gerrit-openssh"
+              "awslogs-stream-prefix": "lf-dev-gerrit-main"
           }
       },
       "systemControls": []

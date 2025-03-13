@@ -1,6 +1,5 @@
 #!/bin/bash
 # SSH=1 (to run OpenSSH server image for debugging purposes)
-# NOEFS=1 (without EFS mounts)
 # {{url}} -> https://mockapi.gerrit.dev.itx.linuxfoundation.org
 # {{fs-xyz}} -> fs-ids
 # {[aws-acc-id}} -> aws-account-id.secret
@@ -16,16 +15,12 @@ url='https://lf.gerrit.dev.itx.linuxfoundation.org'
 awsaccid=$(cat ./aws-account-id.secret)
 username=$(cat ./username.secret)
 password=$(cat ./password.secret)
+# TODO: final image must be from both-template.json
 if [ ! -z "$SSH" ]
 then
-  if [ ! -z "$NOEFS" ]
-  then
-    cp ./ssh-template-no-volumes.json ./task.json || exit 1
-  else
-    cp ./ssh-template.json ./task.json || exit 2
-  fi
+  cp ./ssh-template.json ./task.json || exit 1
 else
-  cp ./task-template.json ./task.json || exit 3
+  cp ./gerrit-template.json ./task.json || exit 2
 fi
 sed -i "s|{{url}}|${url}|g" ./task.json
 sed -i "s|{{aws-acc-id}}|${awsaccid}|g" ./task.json
