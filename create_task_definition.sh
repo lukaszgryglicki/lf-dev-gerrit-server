@@ -1,5 +1,6 @@
 #!/bin/bash
 # SSH=1 (to run OpenSSH server image for debugging purposes)
+# NOEFS=1 (without EFS mounts)
 # {{url}} -> https://mockapi.gerrit.dev.itx.linuxfoundation.org
 # {{fs-xyz}} -> fs-ids
 # {[aws-acc-id}} -> aws-account-id.secret
@@ -17,9 +18,14 @@ username=$(cat ./username.secret)
 password=$(cat ./password.secret)
 if [ ! -z "$SSH" ]
 then
-  cp ./ssh-template.json ./task.json || exit 1
+  if [ ! -z "$NOEFS" ]
+  then
+    cp ./ssh-template-no-volumes.json ./task.json || exit 1
+  else
+    cp ./ssh-template.json ./task.json || exit 2
+  fi
 else
-  cp ./task-template.json ./task.json || exit 2
+  cp ./task-template.json ./task.json || exit 3
 fi
 sed -i "s|{{url}}|${url}|g" ./task.json
 sed -i "s|{{aws-acc-id}}|${awsaccid}|g" ./task.json
@@ -27,6 +33,7 @@ sed -i "s|{{username}}|${username}|g" ./task.json
 sed -i "s|{{password}}|${password}|g" ./task.json
 for v in cache db etc git index lib plugins
 do
+  echo "volume: ${v}"
   fsid=$(cat "volume-${v}.json.secret" | jq -r '.FileSystemId')
   if [ -z "${fsid}" ]
   then

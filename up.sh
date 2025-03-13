@@ -11,7 +11,7 @@
 ./update_subnets.sh || exit 10
 ./create_volumes.sh || exit 11
 ./create_mount_targets.sh || exit 12
-# SSH=1 ./create_task_definition.sh || exit 13
+# SSH=1 NOEFS=1 ./create_task_definition.sh || exit 13
 ./create_task_definition.sh || exit 14
 ./create_service.sh || exit 15
 echo 'all ok'
