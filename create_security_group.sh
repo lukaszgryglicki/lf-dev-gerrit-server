@@ -35,6 +35,7 @@ then
     exit 4
   fi
   aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 22 --cidr 10.0.0.0/16 >> security-group-ingress.json.secret
+  # aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 22 --cidr 0.0.0.0/0 >> security-group-ingress.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

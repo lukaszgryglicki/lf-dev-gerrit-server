@@ -5,6 +5,12 @@
 # {[aws-acc-id}} -> aws-account-id.secret
 # {{username}} -> username.secret
 # {{password}} -> password.secret
+if [ -f "task.json.secret" ]
+then
+  echo "$0: task definition already exists"
+  cat task.json.secret
+  exit 1
+fi
 url='https://lf.gerrit.dev.itx.linuxfoundation.org'
 awsaccid=$(cat ./aws-account-id.secret)
 username=$(cat ./username.secret)

@@ -2,8 +2,8 @@
   "family": "dev-gerrit-service",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "cpu": "1024",
-  "memory": "2048",
+  "cpu": "2048",
+  "memory": "4096",
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
@@ -14,6 +14,34 @@
         { "containerPort": 22, "hostPort": 22, "protocol": "tcp" }
       ],
       "mountPoints": [
+          {
+              "sourceVolume": "dev_gerrit_etc",
+              "containerPath": "/var/gerrit/etc"
+          },
+          {
+              "sourceVolume": "dev_gerrit_lib",
+              "containerPath": "/var/gerrit/lib"
+          },
+          {
+              "sourceVolume": "dev_gerrit_git",
+              "containerPath": "/var/gerrit/git"
+          },
+          {
+              "sourceVolume": "dev_gerrit_db",
+              "containerPath": "/var/gerrit/db"
+          },
+          {
+              "sourceVolume": "dev_gerrit_cache",
+              "containerPath": "/var/gerrit/cache"
+          },
+          {
+              "sourceVolume": "dev_gerrit_index",
+              "containerPath": "/var/gerrit/index"
+          },
+          {
+              "sourceVolume": "dev_gerrit_plugins",
+              "containerPath": "/var/gerrit/plugins"
+          }
       ],
       "environment": [
           {
@@ -38,5 +66,61 @@
     }
   ],
   "volumes": [
+      {
+          "name": "dev_gerrit_etc",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-etc}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_git",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-git}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_db",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-db}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_index",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-index}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_lib",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-lib}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_cache",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-cache}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_plugins",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-plugins}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      }
   ]
 }

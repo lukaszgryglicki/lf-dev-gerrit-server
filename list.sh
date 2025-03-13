@@ -1,4 +1,5 @@
 #!/bin/bash
+export VERBOSE=1
 ./list_azs.sh
 ./list_clusters.sh
 for v in cache db etc git index lib plugins

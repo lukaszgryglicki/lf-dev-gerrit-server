@@ -10,4 +10,5 @@
 ./delete_inet_gw.sh || exit 9
 ./delete_security_group.sh || exit 10
 ./delete_vpc.sh || exit 11
-./delete_cluster.sh || exit 12
+./delete_log_group.sh || exit 12
+./delete_cluster.sh || exit 13
