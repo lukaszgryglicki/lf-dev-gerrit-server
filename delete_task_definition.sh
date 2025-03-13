@@ -14,5 +14,5 @@ do
 done
 if [ ! -z "${deleted}" ]
 then
-  rm -f task.json.secret
+  rm -f task.json.secret task.json
 fi

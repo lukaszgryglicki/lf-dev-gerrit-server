@@ -1,0 +1,42 @@
+{
+  "family": "dev-gerrit-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "dev_gerrit",
+      "image": "lscr.io/linuxserver/openssh-server:latest",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 22, "hostPort": 22, "protocol": "tcp" }
+      ],
+      "mountPoints": [
+      ],
+      "environment": [
+          {
+              "name": "USERNAME",
+              "value": "{{username}}"
+          },
+          {
+              "name": "PASSWORD",
+              "value": "{{password}}"
+          }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "lf_dev_gerrit",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "lf-dev-gerrit-logstream"
+          }
+      },
+      "systemControls": []
+    }
+  ],
+  "volumes": [
+  ]
+}

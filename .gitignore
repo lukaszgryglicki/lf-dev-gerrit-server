@@ -1,3 +1,4 @@
 *.secret
 *.sw?
 task.json
+out
