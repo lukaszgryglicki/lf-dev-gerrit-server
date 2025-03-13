@@ -6,8 +6,9 @@ Gerrit Server for Dev use by LF
 
 - `` ./create_cluster.sh ``.
 - `` ./create_vpc.sh ``.
-- `` ./create_vpc.sh ``.
 - `` ./create_inet_gw.sh ``.
+- `` ./create_route_table.sh ``.
+- `` ./create_route.sh ``.
 - `` ./create_subnets.sh ``.
 - `` ./create_security_group.sh ``.
 - `` ./create_volumes.sh ``.
@@ -24,6 +25,8 @@ Gerrit Server for Dev use by LF
 - `` ./delete_volumes.sh ``.
 - `` ./delete_security_group.sh ``.
 - `` ./delete_subnets.sh ``.
+- `` ./delete_route.sh ``.
+- `` ./delete_route_table.sh ``.
 - `` ./delete_inet_gw.sh ``.
 - `` ./delete_vpc.sh ``.
 - `` ./delete_cluster.sh ``.
