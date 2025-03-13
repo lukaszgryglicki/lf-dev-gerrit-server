@@ -7,7 +7,7 @@ then
   res=$?
   if [ "${res}" = "0" ]
   then
-    rm -f "vpc.json.secret"
+    rm -f "vpc.json.secret" "describe-vpc.json.secret"
   else
     echo "delete result: ${res}"
   fi
