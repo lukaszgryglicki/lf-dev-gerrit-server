@@ -15,6 +15,13 @@ fi
 if [ ! -f "inet-gw.json.secret" ]
 then
   aws --profile lfproduct-dev ec2 create-internet-gateway --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=dev_gerrit_internet_gw}]' > inet-gw.json.secret
+  res=$?
+  if [ ! "${res}" = "0" ]
+  then
+    echo "$0: create inet gw failed"
+    rm -f "inet-gw.json.secret"
+    exit 2
+  fi
   igwid=$(cat inet-gw.json.secret | jq -r '.InternetGateway.InternetGatewayId')
   echo "inet-gw id: ${igwid}"
   if [ ! -z "${vpcid}" ]
@@ -22,6 +29,11 @@ then
     aws --profile lfproduct-dev ec2 attach-internet-gateway --internet-gateway-id "${igwid}" --vpc-id "${vpcid}"
   fi
   aws --profile lfproduct-dev ec2 describe-internet-gateways --internet-gateway-id igw-02f93214b47847122 > describe-inet-gw.json.secret
+  res=$?
+  if [ ! "${res}" = "0" ]
+  then
+    rm -f "describe-inet-gw.json.secret"
+  fi
 else
   echo "$0: inet-gw already created:"
   cat inet-gw.json.secret
