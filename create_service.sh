@@ -31,7 +31,7 @@ then
     fi
   done
   netconf="awsvpcConfiguration={subnets=[${subnets}],securityGroups=[${sgid}],assignPublicIp=\"ENABLED\"}" > service.json.secret
-  echo"net conf: ${netconf}"
+  echo "net conf: ${netconf}"
   aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" > service.json.secret
   res=$?
   if [ ! "${res}" = "0" ]

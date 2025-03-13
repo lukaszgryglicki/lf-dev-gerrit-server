@@ -17,11 +17,15 @@
       ],
       "environment": [
           {
-              "name": "USERNAME",
+              "name": "PASSWORD_ACCESS",
+              "value": "true"
+          },
+          {
+              "name": "USER_NAME",
               "value": "{{username}}"
           },
           {
-              "name": "PASSWORD",
+              "name": "USER_PASSWORD",
               "value": "{{password}}"
           }
       ],
