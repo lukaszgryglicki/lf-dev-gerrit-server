@@ -2,8 +2,8 @@
   "family": "dev-gerrit-service",
   "networkMode": "awsvpc",
   "requiresCompatibilities": ["FARGATE"],
-  "cpu": "1024",
-  "memory": "2048",
+  "cpu": "3072",
+  "memory": "4096",
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {

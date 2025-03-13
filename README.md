@@ -4,32 +4,9 @@ Gerrit Server for Dev use by LF
 
 # Provision
 
-- `` ./create_cluster.sh ``.
-- `` ./create_vpc.sh ``.
-- `` ./create_security_group.sh ``.
-- `` ./create_inet_gw.sh ``.
-- `` ./create_route_table.sh ``.
-- `` ./create_route.sh ``.
-- `` ./create_subnets.sh ``.
-- `` ./create_subnets_routes.sh ``.
-- `` ./update_subnets.sh ``.
-- `` ./create_volumes.sh ``.
-- `` ./create_mount_targets.sh ``.
-- `` [SSH=1] ./create_task_definition.sh ``.
-- `` ./create_service.sh ``.
+- `` ./up.sh ``.
 
 
 # Decommission
 
-- `` ./delete_service.sh ``.
-- `` ./delete_task_definition.sh ``.
-- `` ./delete_mount_targets.sh ``.
-- `` ./delete_volumes.sh ``.
-- `` ./delete_subnets_routes.sh ``.
-- `` ./delete_subnets.sh ``.
-- `` ./delete_route.sh ``.
-- `` ./delete_route_table.sh ``.
-- `` ./delete_inet_gw.sh ``.
-- `` ./delete_security_group.sh ``.
-- `` ./delete_vpc.sh ``.
-- `` ./delete_cluster.sh ``.
+- `` ./down.sh ``.
