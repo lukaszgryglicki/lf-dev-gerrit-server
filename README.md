@@ -10,6 +10,7 @@ Gerrit Server for Dev use by LF
 - `` ./create_route_table.sh ``.
 - `` ./create_route.sh ``.
 - `` ./create_subnets.sh ``.
+- `` ./create_subnets_routes.sh ``.
 - `` ./create_security_group.sh ``.
 - `` ./create_volumes.sh ``.
 - `` ./create_mount_targets.sh ``.
@@ -24,6 +25,7 @@ Gerrit Server for Dev use by LF
 - `` ./delete_mount_targets.sh ``.
 - `` ./delete_volumes.sh ``.
 - `` ./delete_security_group.sh ``.
+- `` ./delete_subnets_routes.sh ``.
 - `` ./delete_subnets.sh ``.
 - `` ./delete_route.sh ``.
 - `` ./delete_route_table.sh ``.
