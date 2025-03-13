@@ -11,6 +11,7 @@ Gerrit Server for Dev use by LF
 - `` ./create_route.sh ``.
 - `` ./create_subnets.sh ``.
 - `` ./create_subnets_routes.sh ``.
+- `` ./update_subnets.sh ``.
 - `` ./create_security_group.sh ``.
 - `` ./create_volumes.sh ``.
 - `` ./create_mount_targets.sh ``.
