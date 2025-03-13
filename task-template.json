@@ -1,0 +1,144 @@
+{
+  "family": "dev-gerrit-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "dev_gerrit",
+      "image": "gerritcodereview/gerrit",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 22, "hostPort": 22, "protocol": "tcp" },
+        { "containerPort": 8080, "hostPort": 8080, "protocol": "tcp" },
+        { "containerPort": 29418, "hostPort": 29418, "protocol": "tcp" }
+      ],
+      "mountPoints": [
+          {
+              "sourceVolume": "dev_gerrit_etc",
+              "containerPath": "/var/gerrit/etc"
+          },
+          {
+              "sourceVolume": "dev_gerrit_lib",
+              "containerPath": "/var/gerrit/lib"
+          },
+          {
+              "sourceVolume": "dev_gerrit_git",
+              "containerPath": "/var/gerrit/git"
+          },
+          {
+              "sourceVolume": "dev_gerrit_db",
+              "containerPath": "/var/gerrit/db"
+          },
+          {
+              "sourceVolume": "dev_gerrit_cache",
+              "containerPath": "/var/gerrit/cache"
+          },
+          {
+              "sourceVolume": "dev_gerrit_index",
+              "containerPath": "/var/gerrit/index"
+          },
+          {
+              "sourceVolume": "dev_gerrit_plugins",
+              "containerPath": "/var/gerrit/plugins"
+          }
+      ],
+      "environment": [
+          {
+              "name": "HOST",
+              "value": "0.0.0.0"
+          },
+          {
+              "name": "REINDEX_AT_STARTUP",
+              "value": "false"
+          },
+          {
+              "name": "CANONICAL_WEB_URL",
+              "value": "{{url}}"
+          },
+          {
+              "name": "PORT",
+              "value": "8080"
+          },
+          {
+              "name": "HTTPD_LISTEN_URL",
+              "value": "proxy-https://*:8080/"
+          },
+          {
+              "name": "GERRIT_INIT_ARGS",
+              "value": "--batch --no-auto-start"
+          }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "lf_dev_gerrit",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "lf-dev-gerrit-logstream"
+          }
+      },
+      "systemControls": []
+    }
+  ],
+  "volumes": [
+      {
+          "name": "dev_gerrit_etc",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-etc}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_git",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-git}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_db",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-db}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_index",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-index}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_lib",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-lib}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_cache",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-cache}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "dev_gerrit_plugins",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-plugins}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      }
+  ]
+}
