@@ -49,6 +49,10 @@
               "value": "true"
           },
           {
+              "name": "SUDO_ACCESS",
+              "value": "true"
+          },
+          {
               "name": "USER_NAME",
               "value": "{{username}}"
           },

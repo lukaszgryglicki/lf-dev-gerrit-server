@@ -8,7 +8,7 @@ then
      data=$(./list_cluster_tasks.sh | grep -i eni)
      eni=$(echo "{${data}}" | jq -r '.value')
   else
-    echo "$0: you need to specify ENI-ID as a 1st argument - you can get one via './list_cluster_tasks.sh | grep -i eni'"
+    echo "$0: you need to specify ENI-ID as a 1st argument - you can get one via './list_cluster_tasks.sh | grep -i eni' or use GETENI=1"
     exit 1
   fi
 fi

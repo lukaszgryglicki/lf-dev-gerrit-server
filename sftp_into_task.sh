@@ -13,6 +13,6 @@ then
 fi
 usr=$(cat ./username.secret)
 pwd=$(cat ./password.secret)
-echo "ssh -p 2222 ${usr}@${ip}"
+echo "sftp -o 'Port=2222' ${usr}@${ip}"
 echo "password is: ${pwd}"
-ssh -p 2222 "${usr}@${ip}"
+sftp -o "Port=2222" "${usr}@${ip}"
