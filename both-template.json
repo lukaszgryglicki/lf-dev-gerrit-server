@@ -7,72 +7,6 @@
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
-      "name": "dev_gerrit_openssh",
-      "image": "lscr.io/linuxserver/openssh-server:latest",
-      "essential": true,
-      "portMappings": [
-        { "containerPort": 2222, "hostPort": 2222, "protocol": "tcp" }
-      ],
-      "mountPoints": [
-          {
-              "sourceVolume": "dev_gerrit_etc",
-              "containerPath": "/data/etc"
-          },
-          {
-              "sourceVolume": "dev_gerrit_lib",
-              "containerPath": "/data/lib"
-          },
-          {
-              "sourceVolume": "dev_gerrit_git",
-              "containerPath": "/data/git"
-          },
-          {
-              "sourceVolume": "dev_gerrit_db",
-              "containerPath": "/data/db"
-          },
-          {
-              "sourceVolume": "dev_gerrit_cache",
-              "containerPath": "/data/cache"
-          },
-          {
-              "sourceVolume": "dev_gerrit_index",
-              "containerPath": "/data/index"
-          },
-          {
-              "sourceVolume": "dev_gerrit_plugins",
-              "containerPath": "/data/plugins"
-          }
-      ],
-      "environment": [
-          {
-              "name": "PASSWORD_ACCESS",
-              "value": "true"
-          },
-          {
-              "name": "SUDO_ACCESS",
-              "value": "true"
-          },
-          {
-              "name": "USER_NAME",
-              "value": "{{username}}"
-          },
-          {
-              "name": "USER_PASSWORD",
-              "value": "{{password}}"
-          }
-      ],
-      "volumesFrom": [],
-      "logConfiguration": {
-          "logDriver": "awslogs",
-          "options": {
-              "awslogs-group": "lf_dev_gerrit",
-              "awslogs-region": "us-east-1",
-              "awslogs-stream-prefix": "lf-dev-gerrit-openssh"
-          }
-      },
-      "systemControls": []
-    },
-    {
       "name": "dev_gerrit_main",
       "image": "gerritcodereview/gerrit",
       "essential": true,
@@ -143,6 +77,72 @@
               "awslogs-group": "lf_dev_gerrit",
               "awslogs-region": "us-east-1",
               "awslogs-stream-prefix": "lf-dev-gerrit-main"
+          }
+      },
+      "systemControls": []
+    },
+    {
+      "name": "dev_gerrit_openssh",
+      "image": "lscr.io/linuxserver/openssh-server:latest",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 2222, "hostPort": 2222, "protocol": "tcp" }
+      ],
+      "mountPoints": [
+          {
+              "sourceVolume": "dev_gerrit_etc",
+              "containerPath": "/data/etc"
+          },
+          {
+              "sourceVolume": "dev_gerrit_lib",
+              "containerPath": "/data/lib"
+          },
+          {
+              "sourceVolume": "dev_gerrit_git",
+              "containerPath": "/data/git"
+          },
+          {
+              "sourceVolume": "dev_gerrit_db",
+              "containerPath": "/data/db"
+          },
+          {
+              "sourceVolume": "dev_gerrit_cache",
+              "containerPath": "/data/cache"
+          },
+          {
+              "sourceVolume": "dev_gerrit_index",
+              "containerPath": "/data/index"
+          },
+          {
+              "sourceVolume": "dev_gerrit_plugins",
+              "containerPath": "/data/plugins"
+          }
+      ],
+      "environment": [
+          {
+              "name": "PASSWORD_ACCESS",
+              "value": "true"
+          },
+          {
+              "name": "SUDO_ACCESS",
+              "value": "true"
+          },
+          {
+              "name": "USER_NAME",
+              "value": "{{username}}"
+          },
+          {
+              "name": "USER_PASSWORD",
+              "value": "{{password}}"
+          }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "lf_dev_gerrit",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "lf-dev-gerrit-openssh"
           }
       },
       "systemControls": []

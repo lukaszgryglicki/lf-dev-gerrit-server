@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ ! -f "service.json.secret" ]
+if [ ! -f "alb.json.secret" ]
 then
   sgid=$(cat security-group.json.secret | jq -r '.GroupId')
   if [ -z "${sgid}" ]
@@ -27,22 +27,21 @@ then
     then
       subnets="${subnetid}"
     else
-      subnets="${subnets},${subnetid}"
+      subnets="${subnets} ${subnetid}"
     fi
   done
-  netconf="awsvpcConfiguration={subnets=[${subnets}],securityGroups=[${sgid}],assignPublicIp=\"ENABLED\"}"
-  echo "net conf: ${netconf}"
-  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" > service.json.secret
+  echo "subnets: ${subnets}"
+  aws --profile lfproduct-dev elbv2 create-load-balancer --name "dev-gerrit-alb" --subnets ${subnets} --security-groups "${sgid}" --scheme internet-facing --type application --ip-address-type ipv4 > alb.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
-    echo "$0: create service failed"
-    rm -f "service.json.secret"
+    echo "$0: create ALB failed"
+    rm -f "alb.json.secret"
     exit 1
   fi
-  svcid=$(cat service.json.secret | jq -r '.service.serviceArn')
-  echo "service id: ${svcid}"
+  alb=$(cat alb.json.secret | jq -r '.LoadBalancers[].LoadBalancerArn')
+  echo "ALB: ${alb}"
 else
-  echo "$0: service already created:"
-  cat service.json.secret
+  echo "$0: ALB created:"
+  cat alb.json.secret
 fi

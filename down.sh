@@ -1,4 +1,5 @@
 #!/bin/bash
+./delet_alb.sh || exit 1
 ./delete_service.sh || exit 1
 ./delete_task_definition.sh || exit 2
 ./delete_mount_targets.sh || exit 3
