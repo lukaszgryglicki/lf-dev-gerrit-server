@@ -17,5 +17,6 @@
 ./create_listener.sh  || exit 16
 ./create_service.sh || exit 17
 ./add_route53.sh || exit 18
-#./create_cert.sh || exit 19
+./create_cert.sh || exit 19
+./validate_cert.sh || exit 20
 echo 'all ok'

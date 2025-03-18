@@ -8,7 +8,7 @@ then
   then
     echo "$0: create cert failed"
     rm -f "cert.json.secret"
-    exit 2
+    exit 1
   fi
   cert=$(cat cert.json.secret | jq -r '.CertificateArn')
   echo "cert arn: ${cert}"
