@@ -1,4 +1,5 @@
 #!/bin/bash
+./delete_cert.sh || exit 1
 ./delete_target_group.sh || exit 1
 ./delete_alb.sh || exit 1
 ./delete_service.sh || exit 1

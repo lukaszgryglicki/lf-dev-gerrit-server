@@ -16,4 +16,5 @@
 ./create_service.sh || exit 15
 ./create_alb.sh || exit 16
 ./create_target_group.sh || exit 17
+./create_cert.sh || exit 18
 echo 'all ok'

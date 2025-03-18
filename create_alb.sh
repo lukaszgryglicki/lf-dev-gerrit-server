@@ -42,6 +42,6 @@ then
   alb=$(cat alb.json.secret | jq -r '.LoadBalancers[].LoadBalancerArn')
   echo "ALB: ${alb}"
 else
-  echo "$0: ALB created:"
+  echo "$0: ALB already created:"
   cat alb.json.secret
 fi
