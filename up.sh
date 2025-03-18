@@ -15,4 +15,5 @@
 ./create_task_definition.sh || exit 14
 ./create_service.sh || exit 15
 ./create_alb.sh || exit 16
+./create_target_group.sh || exit 17
 echo 'all ok'
