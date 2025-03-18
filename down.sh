@@ -1,6 +1,5 @@
 #!/bin/bash
 ./delete_service.sh || exit 1
-# ./delete_listener.sh  || exit 2
 ./delete_https_listener.sh  || exit 2
 ./delete_alb.sh || exit 3
 ./delete_target_group.sh || exit 4
