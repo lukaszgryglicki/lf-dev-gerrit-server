@@ -30,8 +30,8 @@ then
     rm -f "https-listener.json.secret"
     exit 2
   fi
-  tgid=$(cat https-listener.json.secret | jq -r '.TargetGroups[].TargetGroupArn')
-  echo "listener: ${tgid}"
+  lid=$(cat https-listener.json.secret | jq -r '.Listeners[].ListenerArn')
+  echo "listener: ${lid}"
 else
   echo "$0: https listener already created:"
   cat https-listener.json.secret

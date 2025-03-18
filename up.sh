@@ -14,7 +14,8 @@
 ./create_task_definition.sh || exit 13
 ./create_target_group.sh || exit 14
 ./create_alb.sh || exit 15
-./create_listener.sh  || exit 16
+# ./create_listener.sh  || exit 16
+./create_https_listener.sh  || exit 16
 ./create_service.sh || exit 17
 ./add_route53.sh || exit 18
 ./create_cert.sh || exit 19
