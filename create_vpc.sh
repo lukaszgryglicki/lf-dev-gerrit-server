@@ -11,7 +11,6 @@ then
   fi
   vpcid=$(cat vpc.json.secret | jq -r '.Vpc.VpcId')
   echo "VPC id: ${vpcid}"
-  # TODO: this does not work currently.
   aws --profile lfproduct-dev ec2 modify-vpc-attribute --vpc-id "${vpcid}" --enable-dns-support "{\"Value\":true}"
   res=$?
   if [ ! "${res}" = "0" ]
@@ -20,7 +19,6 @@ then
     rm -f "vpc.json.secret"
     exit 2
   fi
-  # TODO: this does not work currently.
   aws --profile lfproduct-dev ec2 modify-vpc-attribute --vpc-id "${vpcid}" --enable-dns-hostnames "{\"Value\":true}"
   res=$?
   if [ ! "${res}" = "0" ]

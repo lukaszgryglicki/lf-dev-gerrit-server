@@ -26,7 +26,8 @@ then
     rm -f "security-group-ingress.json.secret"
     exit 3
   fi
-  aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 29418 --cidr 10.0.0.0/16 >> security-group-ingress.json.secret
+  # aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 29418 --cidr 10.0.0.0/16 >> security-group-ingress.json.secret
+  aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 29418 --cidr 0.0.0.0/0 >> security-group-ingress.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

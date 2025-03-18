@@ -15,12 +15,12 @@ url='https://lf.gerrit.dev.itx.linuxfoundation.org'
 awsaccid=$(cat ./aws-account-id.secret)
 username=$(cat ./username.secret)
 password=$(cat ./password.secret)
-# TODO: final image must be from both-template.json
 if [ ! -z "$SSH" ]
 then
   cp ./ssh-template.json ./task.json || exit 1
 else
-  cp ./gerrit-template.json ./task.json || exit 2
+  # cp ./gerrit-template.json ./task.json || exit 2
+  cp ./both-template.json ./task.json || exit 2
 fi
 sed -i "s|{{url}}|${url}|g" ./task.json
 sed -i "s|{{aws-acc-id}}|${awsaccid}|g" ./task.json
