@@ -28,5 +28,5 @@ Gerrit Server for Dev use by LF
 
 - Build helper image to get gerrit files from `/var/gerrit`: `` ./build_helper_image.sh ``.
 - Run helper image: `` ./run_helper_image.sh ``.
-- Copy gerrit.tar from the helper container: `` ./copy_from_helper_image.sh ``.
+- Copy `gerrit.tar` from the helper container: `` ./copy_from_helper_image.sh ``.
 - Copy `gerrit.tar` into Fargate task via `` ./sftp_into_task.sh `` while running task is `` SSH=1 ./create_task_definition.sh ``.

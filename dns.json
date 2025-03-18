@@ -5,8 +5,8 @@
       "Name": "gerrit.dev.platform.linuxfoundation.org",
       "Type": "A",
       "AliasTarget": {
-        "HostedZoneId": "Z2WMPS94V5T2UC",
-        "DNSName": "dev-gerrit-alb-137420091.us-east-1.elb.amazonaws.com",
+        "HostedZoneId": "Z35SXDOTRQ7X7K",
+        "DNSName": "dev-gerrit-alb-907728663.us-east-1.elb.amazonaws.com",
         "EvaluateTargetHealth": false
       }
     }
