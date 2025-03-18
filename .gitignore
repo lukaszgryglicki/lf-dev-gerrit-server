@@ -1,4 +1,5 @@
 *.secret
 *.sw?
+gerrit.tar
 task.json
 out

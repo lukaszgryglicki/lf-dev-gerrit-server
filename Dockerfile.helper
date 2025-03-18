@@ -1,0 +1,4 @@
+FROM gerritcodereview/gerrit
+USER root
+RUN tar cfv /gerrit.tar /var/gerrit
+ENTRYPOINT ["/bin/bash"]
