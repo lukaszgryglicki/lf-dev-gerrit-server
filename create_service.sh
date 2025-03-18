@@ -32,13 +32,20 @@ then
   done
   netconf="awsvpcConfiguration={subnets=[${subnets}],securityGroups=[${sgid}],assignPublicIp=\"ENABLED\"}"
   echo "net conf: ${netconf}"
-  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" > service.json.secret
+  tg=$(cat target-group.json.secret | jq -r '.TargetGroups[].TargetGroupArn')
+  if [ -z "${tg}" ]
+  then
+    echo "$0: target group not found"
+    exit 2
+  fi
+echo "target group: ${tg}"
+  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --load-balancers "targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080" > service.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
     echo "$0: create service failed"
     rm -f "service.json.secret"
-    exit 1
+    exit 3
   fi
   svcid=$(cat service.json.secret | jq -r '.service.serviceArn')
   echo "service id: ${svcid}"

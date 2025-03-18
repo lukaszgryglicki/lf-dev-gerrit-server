@@ -59,13 +59,21 @@ then
     rm -f "security-group-ingress.json.secret"
     exit 7
   fi
+  aws --profile lfproduct-dev ec2 authorize-security-group-ingress --group-id "${sgid}" --protocol tcp --port 80 --cidr 0.0.0.0/0 >> security-group-ingress.json.secret
+  res=$?
+  if [ ! "${res}" = "0" ]
+  then
+    echo "$0: create authorize security group ingress failed"
+    rm -f "security-group-ingress.json.secret"
+    exit 8
+  fi
   aws --profile lfproduct-dev ec2 describe-security-groups --filters "Name=group-name,Values=dev_gerrit_security_group" > describe-security-group.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
     echo "$0: create describe security groups failed"
     rm -f "describe-security-group.json.secret"
-    exit 8
+    exit 9
   fi
 else
   echo "$0: security group already created:"
