@@ -8,8 +8,8 @@ then
 fi
 if [ ! -f "target-group.json.secret" ]
 then
-  aws --profile lfproduct-dev elbv2 create-target-group --name "dev-gerrit-target-group" --protocol HTTP --port 8080 --target-type ip --vpc-id "${vpcid}" --health-check-protocol HTTP --health-check-path / --health-check-port 8080 > target-group.json.secret
-  # aws --profile lfproduct-dev elbv2 create-target-group --name "dev-gerrit-target-group" --protocol HTTP --port 8080 --target-type ip --vpc-id "${vpcid}" > target-group.json.secret
+  # aws --profile lfproduct-dev elbv2 create-target-group --name "dev-gerrit-target-group" --protocol HTTP --port 8080 --target-type ip --vpc-id "${vpcid}" --health-check-protocol HTTP --health-check-path / --health-check-port 8080 > target-group.json.secret
+  aws --profile lfproduct-dev elbv2 create-target-group --name "dev-gerrit-target-group" --protocol HTTP --port 8080 --target-type ip --vpc-id "${vpcid}" > target-group.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
