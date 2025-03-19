@@ -22,4 +22,5 @@ rm -rf index/* || exit 16
 rm -rf /data/plugins/* || exit 17
 cp -R /data/var/gerrit/plugins/* /data/plugins/ || exit 18
 chmod -R ugo+rwx /data || exit 19
+rm -rf var || exit 20
 echo "ok"
