@@ -39,7 +39,7 @@ then
     exit 2
   fi
 echo "target group: ${tg}"
-  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --load-balancers "targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080" > service.json.secret
+  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --load-balancers "targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080" > service.json.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

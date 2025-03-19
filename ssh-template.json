@@ -5,6 +5,7 @@
   "cpu": "2048",
   "memory": "4096",
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskRoleForExec",
   "containerDefinitions": [
     {
       "name": "dev_gerrit_openssh",

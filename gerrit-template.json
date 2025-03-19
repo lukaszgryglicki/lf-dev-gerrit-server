@@ -5,6 +5,7 @@
   "cpu": "4096",
   "memory": "8192",
   "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskRoleForExec",
   "containerDefinitions": [
     {
       "name": "dev_gerrit_main",

@@ -1,0 +1,33 @@
+[gerrit]
+	basePath = git
+	canonicalWebUrl = https://gerrit.dev.platform.linuxfoundation.org
+	serverId = 301792a0-ef57-4474-a376-7f452bea4363
+[index]
+	type = LUCENE
+[auth]
+	type = DEVELOPMENT_BECOME_ANY_ACCOUNT
+[sendemail]
+	smtpServer = localhost
+[sshd]
+	listenAddress = *:29418
+[httpd]
+	listenUrl = proxy-https://*:8080/
+	filterClass = com.googlesource.gerrit.plugins.ootb.FirstTimeRedirect
+	firstTimeRedirectUrl = /login/%23%2F?account_id=1000000
+[cache]
+	directory = cache
+[plugins]
+	allowRemoteAdmin = true
+[container]
+	javaOptions = "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance"
+	javaOptions = "-Dflogger.logging_context=com.google.gerrit.server.logging.LoggingContext#getInstance"
+	user = gerrit
+	javaHome = /usr/lib/jvm/java-21-openjdk-21.0.5.0.11-2.el9.alma.1.x86_64
+	javaOptions = -Djava.security.egd=file:/dev/./urandom
+	javaOptions = --add-opens java.base/java.net=ALL-UNNAMED
+	javaOptions = --add-opens java.base/java.lang.invoke=ALL-UNNAMED
+	javaOptions = -Djava.security.egd=file:/dev/./urandom
+	javaOptions = --add-opens java.base/java.net=ALL-UNNAMED
+	javaOptions = --add-opens java.base/java.lang.invoke=ALL-UNNAMED
+[receive]
+	enableSignedPush = false
