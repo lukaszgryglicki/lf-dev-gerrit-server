@@ -11,7 +11,7 @@ then
   cat task.json.secret
   exit 1
 fi
-url='https://gerrit.dev.platform.linuxfoundation.org'
+url='https://gerrit.dev.platform.linuxfoundation.org/'
 awsaccid=$(cat ./aws-account-id.secret)
 username=$(cat ./username.secret)
 password=$(cat ./password.secret)

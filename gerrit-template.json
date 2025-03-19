@@ -11,6 +11,11 @@
       "name": "dev_gerrit_main",
       "image": "gerritcodereview/gerrit",
       "essential": true,
+      "command": [
+        "sh",
+        "-c",
+        "find /var/gerrit/index/ -iname '*.lock' -exec ls -l '{}' \\; && /var/gerrit/bin/gerrit.sh run"
+      ],
       "portMappings": [
         { "containerPort": 8080, "hostPort": 8080, "protocol": "tcp" },
         { "containerPort": 29418, "hostPort": 29418, "protocol": "tcp" }
