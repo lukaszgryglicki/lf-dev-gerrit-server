@@ -1,4 +1,5 @@
 #!/bin/bash
+# NOLB=1 - don't use load balancers (usually used when doing some openSSH volume cleanups
 if [ ! -f "service.json.secret" ]
 then
   sgid=$(cat security-group.json.secret | jq -r '.GroupId')
@@ -38,9 +39,22 @@ then
     echo "$0: target group not found"
     exit 2
   fi
-echo "target group: ${tg}"
-  aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --load-balancers "targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080" > service.json.secret
-  res=$?
+  echo "target group http: ${tg}"
+  tg2=$(cat target-group-ssh.json.secret | jq -r '.TargetGroups[].TargetGroupArn')
+  if [ -z "${tg2}" ]
+  then
+    echo "$0: target group not found"
+    exit 2
+  fi
+  echo "target group ssh: ${tg2}"
+  if [ -z "${NOLB}" ]
+  then
+    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --load-balancers targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080 targetGroupArn=${tg2},containerName=dev_gerrit_main,containerPort=29418 > service.json.secret
+    res=$?
+  else
+    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command > service.json.secret
+    res=$?
+  fi
   if [ ! "${res}" = "0" ]
   then
     echo "$0: create service failed"

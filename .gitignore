@@ -3,4 +3,6 @@
 gerrit.tar
 task.json
 dns.json
+ssh-dns.json
+saml.jar
 out

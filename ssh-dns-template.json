@@ -1,0 +1,11 @@
+{
+  "Changes": [{
+    "Action": "UPSERT",
+    "ResourceRecordSet": {
+      "Name": "ssh.gerrit.dev.platform.linuxfoundation.org",
+      "Type": "CNAME",
+      "TTL": 60,
+      "ResourceRecords": [{"Value":"{{nlb-dns-name}}"}]
+    }
+  }]
+}

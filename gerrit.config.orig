@@ -26,8 +26,5 @@
 	javaOptions = -Djava.security.egd=file:/dev/./urandom
 	javaOptions = --add-opens java.base/java.net=ALL-UNNAMED
 	javaOptions = --add-opens java.base/java.lang.invoke=ALL-UNNAMED
-	javaOptions = -Djava.security.egd=file:/dev/./urandom
-	javaOptions = --add-opens java.base/java.net=ALL-UNNAMED
-	javaOptions = --add-opens java.base/java.lang.invoke=ALL-UNNAMED
 [receive]
 	enableSignedPush = false
