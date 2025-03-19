@@ -1,9 +1,0 @@
-Untracked files:
-	add_route53.sh
-	create_https_listener.sh
-	create_listener.sh
-	delete_listener.sh
-	dns-template.json
-	dns.json
-	get_hosted_zone_id.sh
-	update_service_load_balancer.sh
