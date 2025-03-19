@@ -6,8 +6,8 @@ index 9d7258c..412cae7 100644
  global:Anonymous-Users                  	Anonymous Users
  global:Project-Owners                   	Project Owners
  global:Registered-Users                 	Registered Users
-+ae49883ef22d7e57e82651c78d4cc455446fbdef	sun-ccla
-+1206bf3a96be239b4e9ac51429315488221df783	sun-icla
++ae49883ef22d7e57e82651c78d4cc455446fbdef	saml/sun-ccla
++1206bf3a96be239b4e9ac51429315488221df783	saml/sun-icla
 diff --git a/project.config b/project.config
 index 603781e..b0d1f1a 100644
 --- a/project.config
@@ -44,11 +44,11 @@ index 603781e..b0d1f1a 100644
 +[contributor-agreement "CCLA"]
 +	description = CCLA (Corporate Contributor License Agreement) for SUN
 +	agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/corporate/agreementUrl.html
-+	accepted = group sun-ccla
++	accepted = group saml/sun-ccla
 +[contributor-agreement "ICLA"]
 +	description = ICLA (Individual Contributor License Agreement) for SUN
 +	agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/individual/agreementUrl.html
-+	accepted = group sun-icla
++	accepted = group saml/sun-icla
  [submit-requirement "No-Unresolved-Comments"]
  	description = Changes that have unresolved comments are not submittable.
  	applicableIf = has:unresolved
