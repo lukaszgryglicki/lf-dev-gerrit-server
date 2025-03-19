@@ -38,7 +38,42 @@ Gerrit Server for Dev use by LF
 - Check gerrit SSH access: `` ./gerrit_ssh.sh ``, it should return something like: `gerrit version 3.11.1`. This means SSH access is configured properly.
 - Add your user to `Administators` group: `` ./gerrit_admin_cmd.sh set-members Administrators --add username ``.
 - Check if user can see `Administrators` group: `` ./gerrit_cmd.sh ls-groups ``.
-
+- Create groups: `` ./gerrit_cmd.sh create-group sun-ccla ``, `` ./gerrit_cmd.sh create-group sun-icla ``.
+- List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
+- Clone `All-Projects` repo: `` ./gerrit_clone_all_projects.sh ``.
+- Add `sun-icla` and `sun-ccla` groups to `All-Projects/groups` file, like this:
+```
+ae49883ef22d7e57e82651c78d4cc455446fbdef  sun-ccla
+1206bf3a96be239b4e9ac51429315488221df783  sun-icla
+```
+- Update `All-Projects/project.config` with the following changes:
+  - in the `[receive]` section: change `requireContributorAgreement`, `requireSignedOffBy`, `enableSignedPush` from `false` to `true`.
+  - in the `[receive]` section: add `requireSignedPush = false`.
+  - in then`[access "refs/meta/config"]` section add:
+  ```
+    push = +force group Administrators
+    forgeAuthor = group Administrators
+    forgeCommitter = group Administrators
+  ```
+  - add sections:
+  ```
+  [contributor-agreement "CCLA"]
+    description = CCLA (Corporate Contributor License Agreement) for SUN
+    agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/corporate/agreementUrl.html
+    accepted = group sun-ccla
+  [contributor-agreement "ICLA"]
+    description = ICLA (Individual Contributor License Agreement) for SUN
+    agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/individual/agreementUrl.html
+    accepted = group sun-icla
+  ```
+  - TODO: note usage of `c64998ab-833d-4d55-8b83-04e7d3398c99` UUID here - this should be UUID from `DynamoDB` gerrit server instance (`gerrit-instances` table) - this is per-project gerrit server entry UUID.
+- Typical changes are similar to `all-projects.diff`.
+- Install gerrit commit hooks: `` cd All-Projects && ../gerrit_commit_hooks.sh  && cd .. ``.
+- Commit `All-Projects` changes: `` cd All-Projects && ../gerrit_commit_all_projects_changes.sh && cd .. ``.
+- Add push permission for `refs/meta/config` branch [here](https://gerrit.dev.platform.linuxfoundation.org/admin/repos/All-Projects,access):
+  - Click `Edit`, locate `refs/meta/config` choose `Add permission`: `Push`, click `Add`. Choose group `Administrators`, allow both with and without force.
+  - Do the same with `Forge Author Identity` and `Forge Comitter Identity`.
+- Push `All-Projects` changes: `` cd All-Projects && ../gerrit_push_all_projects_changes.sh && cd .. ``.
 
 # Other
 
@@ -53,3 +88,4 @@ Gerrit Server for Dev use by LF
 - To craete task with only OpenSSH server and gerrit volumes mounted use `` SSH=1 ./create_task_definition.sh `` and then `` NOLB=1 ./create_service.sh ``.
 - To reload gerrit config: `` ./gerrit_cmd.sh reload-config `` or `` ./gerrit_admin_cmd.sh reload-config ``.
 - `gerrit-saml.tar` is a backup of all persistent volumes data after `admin` user was added using "1st login mode" and then one LFID user was added by SAML auth (also admin).
+- `gerrit-configured.tar` is a backup made by `./backup_gerrit.sh` while using `GETIP=1 ssh_into_task.sh` after all changes to `All-Projects` were pushed.
