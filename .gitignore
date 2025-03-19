@@ -1,6 +1,7 @@
 *.secret
 *.sw?
 gerrit.tar
+gerrit-saml.tar
 task.json
 dns.json
 ssh-dns.json

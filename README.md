@@ -52,3 +52,4 @@ Gerrit Server for Dev use by LF
 - To cleanup gerrit to its initial state, execute `` ./reset_gerrit.sh `` while inside `` ./ssh_into_task `` using `sudo ./reset_gerrit.sh ``.
 - To craete task with only OpenSSH server and gerrit volumes mounted use `` SSH=1 ./create_task_definition.sh `` and then `` NOLB=1 ./create_service.sh ``.
 - To reload gerrit config: `` ./gerrit_cmd.sh reload-config `` or `` ./gerrit_admin_cmd.sh reload-config ``.
+- `gerrit-saml.tar` is a backup of all persistent volumes data after `admin` user was added using "1st login mode" and then one LFID user was added by SAML auth (also admin).
