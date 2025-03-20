@@ -103,3 +103,6 @@ Gerrit Server for Dev use by LF
 - Then call example API via: `` ./gerrit_api_groups.sh ``.
 - More info about SAML plugin is [here](https://gerrit.googlesource.com/plugins/saml/).
 - To do some updates of `gerrit.config` do: `` GETIP=1 ./ssh_into_task.sh `` or `` ./shell_into_gerrit.sh `` - do updates `sudo vi /data/etc/gerrit.config` or `sudo vi /etc/gerrit/gerrit.config`.
+- To remove ICLA for user: first deletec ICLA: `` ./dynamodb_get_signature.sh signature-uuid ``, then remove that user from `saml/sun-icla` group: `` ./gerrit_admin_cmd.sh set-members 'saml/sun-icla' --remove username ``.
+- To get user's ID: `` ./dynamodb_lookup_user_by_lfid.sh lfid `` - note `user_id` UUID, then to get this user's signatures: `` ./dynamodb_lookup_signatures_by_reference_id.sh user_id `` - note `signature_id` UUID.
+- To check users who signed ICLAs: `` ./gerrit_admin_cmd.sh ls-members 'saml/sun-icla' ``.
