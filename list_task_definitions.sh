@@ -1,7 +1,8 @@
 #!/bin/bash
+. ./env.sh
 if [ -z "$VERBOSE" ]
 then
-  aws --profile lfproduct-dev ecs list-task-definitions --family-prefix dev-gerrit-service | jq -r '.taskDefinitionArns[]'
+  aws --profile lfproduct-${STAGE} ecs list-task-definitions --family-prefix ${STAGE}-gerrit-service | jq -r '.taskDefinitionArns[]'
 else
-  aws --profile lfproduct-dev ecs list-task-definitions --family-prefix dev-gerrit-service | jq -r
+  aws --profile lfproduct-${STAGE} ecs list-task-definitions --family-prefix ${STAGE}-gerrit-service | jq -r
 fi

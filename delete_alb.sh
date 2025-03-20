@@ -1,16 +1,17 @@
 #!/bin/bash
-alb=$(cat alb.json.secret | jq -r '.LoadBalancers[].LoadBalancerArn')
+. ./env.sh
+alb=$(cat alb.json.${STAGE}.secret | jq -r '.LoadBalancers[].LoadBalancerArn')
 if [ ! -z "${alb}" ]
 then
   echo "alb arn: ${alb}"
-  aws --profile lfproduct-dev elbv2 delete-load-balancer --load-balancer-arn "${alb}"
+  aws --profile lfproduct-${STAGE} elbv2 delete-load-balancer --load-balancer-arn "${alb}"
   res=$?
   if [ "${res}" = "0" ]
   then
-    rm -f "alb.json.secret"
+    rm -f "alb.json.${STAGE}.secret"
   else
     echo "delete result: ${res}"
   fi
 else
-  echo "$0: no alb.json.secret file"
+  echo "$0: no alb.json.${STAGE}.secret file"
 fi

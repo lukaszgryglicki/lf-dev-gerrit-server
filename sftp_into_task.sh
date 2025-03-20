@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./env.sh
 # GETIP=1
 ip="${1}"
 if [ -z "${ip}" ]
@@ -11,8 +12,8 @@ then
     exit 1
   fi
 fi
-usr=$(cat ./username.secret)
-pwd=$(cat ./password.secret)
+usr=$(cat ./username.${STAGE}.secret)
+pwd=$(cat ./password.${STAGE}.secret)
 echo "sftp -o 'Port=2222' ${usr}@${ip}"
 echo "password is: ${pwd}"
 sftp -o "Port=2222" "${usr}@${ip}"

@@ -1,2 +1,3 @@
 #!/bin/bash
-aws --profile lfproduct-dev route53 list-hosted-zones
+. ./env.sh
+aws --profile lfproduct-${STAGE} route53 list-hosted-zones

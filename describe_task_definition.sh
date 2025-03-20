@@ -1,2 +1,3 @@
 #!/bin/bash
-aws --profile lfproduct-dev ecs describe-task-definition --task-definition dev-gerrit-service
+. ./env.sh
+aws --profile lfproduct-${STAGE} ecs describe-task-definition --task-definition ${STAGE}-gerrit-service

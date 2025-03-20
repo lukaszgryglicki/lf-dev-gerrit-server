@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./env.sh
 ./delete_service.sh || exit 1
 ./delete_ssh_listener.sh  || exit 2
 ./delete_https_listener.sh  || exit 3

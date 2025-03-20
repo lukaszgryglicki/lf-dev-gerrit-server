@@ -1,16 +1,17 @@
 #!/bin/bash
-cert=$(cat cert.json.secret | jq -r '.CertificateArn')
+. ./env.sh
+cert=$(cat cert.json.${STAGE}.secret | jq -r '.CertificateArn')
 if [ ! -z "${cert}" ]
 then
   echo "certificate arn: ${cert}"
-  aws --profile lfproduct-dev acm delete-certificate --certificate-arn "${cert}"
+  aws --profile lfproduct-${STAGE} acm delete-certificate --certificate-arn "${cert}"
   res=$?
   if [ "${res}" = "0" ]
   then
-    rm -f "cert.json.secret"
+    rm -f "cert.json.${STAGE}.secret"
   else
     echo "delete result: ${res}"
   fi
 else
-  echo "$0: no cert.json.secret file"
+  echo "$0: no cert.json.${STAGE}.secret file"
 fi

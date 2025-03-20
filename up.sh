@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./env.sh
 ./create_cluster.sh || exit 1
 ./create_log_group.sh || exit 2
 ./create_vpc.sh || exit 3

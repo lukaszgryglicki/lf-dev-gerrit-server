@@ -1,2 +1,3 @@
 #!/bin/bash
-aws --profile lfproduct-dev ecs list-services --cluster dev_gerrit_cluster | jq -r '.'
+. ./env.sh
+aws --profile lfproduct-${STAGE} ecs list-services --cluster dev_gerrit_cluster | jq -r '.'

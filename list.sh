@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./env.sh
 export VERBOSE=1
 ./list_azs.sh
 ./list_clusters.sh

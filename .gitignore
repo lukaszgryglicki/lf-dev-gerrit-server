@@ -6,6 +6,9 @@ gerrit-configured.tar
 task.json
 dns.json
 ssh-dns.json
+task.*.json
+dns.*.json
+ssh-dns.*.json
 saml.jar
 All-Projects/
 out

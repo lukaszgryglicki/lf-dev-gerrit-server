@@ -1,0 +1,14 @@
+{
+  "Changes": [{
+    "Action": "UPSERT",
+    "ResourceRecordSet": {
+      "Name": "gerrit.platform.linuxfoundation.org",
+      "Type": "A",
+      "AliasTarget": {
+        "HostedZoneId": "{{hosted-zone-id}}",
+        "DNSName": "{{alb-dns-name}}",
+        "EvaluateTargetHealth": false
+      }
+    }
+  }]
+}

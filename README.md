@@ -1,5 +1,8 @@
 # lf-dev-gerrit-server
+
 Gerrit Server for Dev use by LF
+
+All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exporting `export STAGE=dev|prod` in the current shell.
 
 
 # Provision

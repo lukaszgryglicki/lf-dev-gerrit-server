@@ -1,5 +1,6 @@
 #!/bin/bash
-rtid=$(cat route-table.json.secret | jq -r '.RouteTable.RouteTableId')
+. ./env.sh
+rtid=$(cat route-table.json.${STAGE}.secret | jq -r '.RouteTable.RouteTableId')
 echo "route table id: ${rtid}"
 if [ -z "${rtid}" ]
 then
@@ -8,20 +9,20 @@ then
 fi
 for z in a b c d e f
 do
-  subnetid=$(cat "subnet-1${z}.json.secret" | jq -r '.Subnet.SubnetId')
+  subnetid=$(cat "subnet-1${z}.json.${STAGE}.secret" | jq -r '.Subnet.SubnetId')
   echo "Subnet us-east-1${z} id: ${subnetid}"
   if [ ! -z "${subnetid}" ]
   then
-    if [ ! -f "route-1${z}.json.secret" ]
+    if [ ! -f "route-1${z}.json.${STAGE}.secret" ]
     then
-      aws --profile lfproduct-dev ec2 associate-route-table --route-table-id "${rtid}" --subnet-id "${subnetid}" > "route-1${z}.json.secret"
+      aws --profile lfproduct-${STAGE} ec2 associate-route-table --route-table-id "${rtid}" --subnet-id "${subnetid}" > "route-1${z}.json.${STAGE}.secret"
       res=$?
       if [ ! "${res}" = "0" ]
       then
         echo "$0: associate route failed"
-        rm -f "route-1${z}.json.secret"
+        rm -f "route-1${z}.json.${STAGE}.secret"
       else
-        aid=$(cat "route-1${z}.json.secret" | jq -r '.AssociationId')
+        aid=$(cat "route-1${z}.json.${STAGE}.secret" | jq -r '.AssociationId')
         echo "association id: ${aid}"
       fi
     else

@@ -1,4 +1,5 @@
 #!/bin/bash
+. ./env.sh
 # GETENI=1
 eni="${1}"
 if [ -z "${eni}" ]
@@ -12,4 +13,4 @@ then
     exit 1
   fi
 fi
-aws --profile lfproduct-dev ec2 describe-network-interfaces --network-interface-ids "${eni}" --query "NetworkInterfaces[0].Association.PublicIp" --output text
+aws --profile lfproduct-${STAGE} ec2 describe-network-interfaces --network-interface-ids "${eni}" --query "NetworkInterfaces[0].Association.PublicIp" --output text

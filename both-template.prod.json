@@ -1,0 +1,215 @@
+{
+  "family": "prod-gerrit-service",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "4096",
+  "memory": "8192",
+  "executionRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::{{aws-acc-id}}:role/ecsTaskRoleForExec",
+  "containerDefinitions": [
+    {
+      "name": "prod_gerrit_main",
+      "image": "gerritcodereview/gerrit",
+      "essential": true,
+      "command": [
+        "sh",
+        "-c",
+        "find /var/gerrit/index/ -iname '*.lock' -exec ls -l '{}' \\; && /var/gerrit/bin/gerrit.sh run"
+      ],
+      "portMappings": [
+        { "containerPort": 8080, "hostPort": 8080, "protocol": "tcp" },
+        { "containerPort": 29418, "hostPort": 29418, "protocol": "tcp" }
+      ],
+      "mountPoints": [
+          {
+              "sourceVolume": "prod_gerrit_etc",
+              "containerPath": "/var/gerrit/etc"
+          },
+          {
+              "sourceVolume": "prod_gerrit_lib",
+              "containerPath": "/var/gerrit/lib"
+          },
+          {
+              "sourceVolume": "prod_gerrit_git",
+              "containerPath": "/var/gerrit/git"
+          },
+          {
+              "sourceVolume": "prod_gerrit_db",
+              "containerPath": "/var/gerrit/db"
+          },
+          {
+              "sourceVolume": "prod_gerrit_cache",
+              "containerPath": "/var/gerrit/cache"
+          },
+          {
+              "sourceVolume": "prod_gerrit_index",
+              "containerPath": "/var/gerrit/index"
+          },
+          {
+              "sourceVolume": "prod_gerrit_plugins",
+              "containerPath": "/var/gerrit/plugins"
+          }
+      ],
+      "environment": [
+          {
+              "name": "HOST",
+              "value": "0.0.0.0"
+          },
+          {
+              "name": "REINDEX_AT_STARTUP",
+              "value": "false"
+          },
+          {
+              "name": "CANONICAL_WEB_URL",
+              "value": "{{url}}"
+          },
+          {
+              "name": "PORT",
+              "value": "8080"
+          },
+          {
+              "name": "HTTPD_LISTEN_URL",
+              "value": "proxy-https://*:8080/"
+          },
+          {
+              "name": "GERRIT_INIT_ARGS",
+              "value": "--batch --no-auto-start"
+          }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "lf_prod_gerrit",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "lf-prod-gerrit-main"
+          }
+      },
+      "systemControls": []
+    },
+    {
+      "name": "prod_gerrit_openssh",
+      "image": "lscr.io/linuxserver/openssh-server:latest",
+      "essential": true,
+      "portMappings": [
+        { "containerPort": 2222, "hostPort": 2222, "protocol": "tcp" }
+      ],
+      "mountPoints": [
+          {
+              "sourceVolume": "prod_gerrit_etc",
+              "containerPath": "/data/etc"
+          },
+          {
+              "sourceVolume": "prod_gerrit_lib",
+              "containerPath": "/data/lib"
+          },
+          {
+              "sourceVolume": "prod_gerrit_git",
+              "containerPath": "/data/git"
+          },
+          {
+              "sourceVolume": "prod_gerrit_db",
+              "containerPath": "/data/db"
+          },
+          {
+              "sourceVolume": "prod_gerrit_cache",
+              "containerPath": "/data/cache"
+          },
+          {
+              "sourceVolume": "prod_gerrit_index",
+              "containerPath": "/data/index"
+          },
+          {
+              "sourceVolume": "prod_gerrit_plugins",
+              "containerPath": "/data/plugins"
+          }
+      ],
+      "environment": [
+          {
+              "name": "PASSWORD_ACCESS",
+              "value": "true"
+          },
+          {
+              "name": "SUDO_ACCESS",
+              "value": "true"
+          },
+          {
+              "name": "USER_NAME",
+              "value": "{{username}}"
+          },
+          {
+              "name": "USER_PASSWORD",
+              "value": "{{password}}"
+          }
+      ],
+      "volumesFrom": [],
+      "logConfiguration": {
+          "logDriver": "awslogs",
+          "options": {
+              "awslogs-group": "lf_prod_gerrit",
+              "awslogs-region": "us-east-1",
+              "awslogs-stream-prefix": "lf-prod-gerrit-openssh"
+          }
+      },
+      "systemControls": []
+    }
+  ],
+  "volumes": [
+      {
+          "name": "prod_gerrit_etc",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-etc}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_git",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-git}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_db",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-db}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_index",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-index}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_lib",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-lib}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_cache",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-cache}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      },
+      {
+          "name": "prod_gerrit_plugins",
+          "efsVolumeConfiguration": {
+              "fileSystemId": "{{fs-plugins}}",
+              "rootDirectory": "/",
+              "transitEncryption": "ENABLED"
+          }
+      }
+  ]
+}

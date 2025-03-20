@@ -1,2 +1,3 @@
 #!/bin/bash
-aws --profile lfproduct-dev ecs list-clusters
+. ./env.sh
+aws --profile lfproduct-${STAGE} ecs list-clusters
