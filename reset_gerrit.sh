@@ -1,5 +1,4 @@
 #!/bin/bash
-. ./env.sh
 cd /data || exit 1
 if [ ! -f "db/gerrit.tar" ]
 then

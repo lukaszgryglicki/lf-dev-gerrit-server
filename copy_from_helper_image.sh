@@ -1,5 +1,4 @@
 #!/bin/bash
-. ./env.sh
 image_id="$(docker ps --filter ancestor="lukaszgryglicki/gerrit-root-bash" --format "{{.ID}}" | head -n 1)"
 if [ -z "${image_id}" ]
 then
