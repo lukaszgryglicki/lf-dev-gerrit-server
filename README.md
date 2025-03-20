@@ -2,8 +2,11 @@
 
 LF Gerrit Server
 
-All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exporting `export STAGE=dev|prod` in the current shell.
-
+- All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exporting `export STAGE=dev|prod` in the current shell.
+- Some `secret` files must be created manualy for each stage, they are (replace `S` with `dev` or `prod`):
+- `` aws-account-id.S.secret, domain.S.secret, email.S.secret, fullname.S.secret, keystore-pwd.S.secret, password.S.secret, private-key-path.S.secret, username.S.secret ``.
+- Those can only be retrieved after `auth0-terraform` PR is merged: `` gerrit_client_id.S.secret, gerrit_client_secret.S.secret ``.
+- This will be generated via Gerrit UI (http password): `` http-token.S.secret ``.
 
 # Provision
 
@@ -29,14 +32,14 @@ All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exportin
 - Put `gerrit.tar` on persistent volume - for example: `sudo mv /config/gerrit.tar /data/db/gerrit.tar` while inside `` ./ssh_into_task.sh ``.
 - Run `ssh_copy_saml.sh` as `root` (`sudo /bin/bash`) while inside the `openssh` container. It creates `/data/lib/saml.jar` file.
 - Login to gerrit - that user will become an administrator due to initial setting `DEVELOPMENT_BECOME_ANY_ACCOUNT` in `[auth]` section of `gerrit.config` file.
-- Go to [SSH Keys](https://gerrit.dev.platform.linuxfoundation.org/settings/#SSHKeys) - copy you public SSH key(s) there, so you can access the gerrit server via SSH.
+- Go to [SSH Keys](https://gerrit.dev.platform.linuxfoundation.org/settings/#SSHKeys) or [SSH Keys](https://gerrit.platform.linuxfoundation.org/settings/#SSHKeys) - copy you public SSH key(s) there, so you can access the gerrit server via SSH.
 - Copy-paste for example: `~/.ssh/id_rsa.pub` file.
 - Confirm that you are recognized as an admin: `` ./gerrit_admin_ssh.sh ``, it should return something like: `gerrit version 3.11.1`. This means SSH access is configured properly.
 - Confirm that there is `Administrators` group: `` ./gerrit_admin_cmd.sh ls-groups ``.
-- Put `gerrit.config` in `/data/etc/gerrit.config` using openssh `ssh` and `sftp` access, replace `{{gerrit-client-id}}` with contects of `gerrit_client_id.dev.secret` file and `{{keystore-pwd}}` with `keystore-pwd.dev.secret`.
+- Put `gerrit.config` in `/data/etc/gerrit.config` using openssh `ssh` and `sftp` access, replace `{{gerrit-client-id}}` with contects of `gerrit_client_id.STAGE.secret` file and `{{keystore-pwd}}` with `keystore-pwd.STAGE.secret`.
 - Redeploy gerrit server: `` ./redeploy_service.sh  ``. Wait until new task is running and the old one is not (otherwise auth mode won't be `SAML` yet). You may need to stop tasks manually or recreate service.
 - Login to gerrit again this time using `SAML LF auth0`. Then we will make that user admin too.
-- Go to [SSH Keys](https://gerrit.dev.platform.linuxfoundation.org/settings/#SSHKeys) - copy you public SSH key(s) there, so you can access the gerrit server via SSH.
+- Go to [SSH Keys](https://gerrit.dev.platform.linuxfoundation.org/settings/#SSHKeys) or [SSH Keys](https://gerrit.platform.linuxfoundation.org/settings/#SSHKeys) - copy you public SSH key(s) there, so you can access the gerrit server via SSH.
 - Copy-paste for example: `~/.ssh/id_rsa.pub` file. Emails from SSH key and from LF auth0 must match.
 - Check gerrit SSH access: `` ./gerrit_ssh.sh ``, it should return something like: `gerrit version 3.11.1`. This means SSH access is configured properly.
 - Add your user to `Administators` group: `` ./gerrit_admin_cmd.sh set-members Administrators --add username ``.
@@ -70,19 +73,21 @@ All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exportin
     agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/individual/agreementUrl.html
     accepted = group saml/sun-icla
   ```
+  - For prod remove `.dev` from the `agreementUrl` URL.
   - Note usage of `c64998ab-833d-4d55-8b83-04e7d3398c99` UUID here - this should be UUID from `DynamoDB` gerrit server instance (`gerrit-instances` table) - this is per-project gerrit server entry UUID, check: `` ./dynamodb_get_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 ``.
   - Note that `project_id` returned by this call should match `project CLA group` (here: `01af041c-fa69-4052-a23c-fb8c1d3bef24`) used in `LF-Engineering/auth0-terraform`:`src/actions/fetch_groups.js`.
 - Typical changes are similar to `all-projects.diff`.
 - Install gerrit commit hooks: `` cd All-Projects && ../gerrit_commit_hooks.sh  && cd .. ``.
 - Commit `All-Projects` changes: `` cd All-Projects && ../gerrit_commit_all_projects_changes.sh && cd .. ``.
-- Add push permission for `refs/meta/config` branch [here](https://gerrit.dev.platform.linuxfoundation.org/admin/repos/All-Projects,access):
+- Add push permission for `refs/meta/config` branch [here](https://gerrit.dev.platform.linuxfoundation.org/admin/repos/All-Projects,access) or [there](https://gerrit.platform.linuxfoundation.org/admin/repos/All-Projects,access):
   - Click `Edit`, locate `refs/meta/config` choose `Add permission`: `Push`, click `Add`. Choose group `Administrators`, allow both with and without force.
   - Do the same with `Forge Author Identity` and `Forge Comitter Identity`.
 - At this point it may happen that gerrit will already detect that you didn't sign the `CLA`, in such case check with `communitybridge/easycla`: `` DEBUG=1 ./utils/lookup_sf.sh gerrit_instances gerrit_id gerrit_id "'c64998ab-833d-4d55-8b83-04e7d3398c99'" ``.
-  - Eventually lookup this instance in `SnowFlake`: `` select * from fivetran_ingest.dynamodb_product_us_east1_dev.cla_dev_gerrit_instances where gerrit_id = 'c64998ab-833d-4d55-8b83-04e7d3398c99'; ``.
+  - Eventually lookup this instance in `dev` `SnowFlake`: `` select * from fivetran_ingest.dynamodb_product_us_east1_dev.cla_dev_gerrit_instances where gerrit_id = 'c64998ab-833d-4d55-8b83-04e7d3398c99'; ``.
+  - Eventually lookup this instance in `prod` `SnowFlake`: `` select * from fivetran_ingest.dynamodb_product_us_east_1.cla_prod_gerrit_instances where gerrit_id = '0a97d213-2057-4582-8bbf-9c55d9940259'; ``.
   - Eventually lookup this instance in `DynamoDB`: `` ./dynamodb_get_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 ``.
-- If gerrit URL and/or Name is not correct, update like this: `` ./dynamodb_update_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 'EasyCLA STAGE Gerrit' 'https://gerrit.dev.platform.linuxfoundation.org/' ``.
-- It must point to `https://gerrit.dev.platform.linuxfoundation.org` gerrit instance, use [this](https://gerrit.dev.platform.linuxfoundation.org/settings/new-agreement) to sign the CLA.
+- If gerrit URL and/or Name is not correct, update like this: `` ./dynamodb_update_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 'EasyCLA STAGE Gerrit' 'https://gerrit.dev.platform.linuxfoundation.org/' ``. Remove `.dev` for `prod`.
+- It must point to `https://gerrit.dev.platform.linuxfoundation.org` gerrit instance, use [this](https://gerrit.dev.platform.linuxfoundation.org/settings/new-agreement) or [that](https://gerrit.platform.linuxfoundation.org/settings/new-agreement) to sign the CLA.
 - You can manually add user to CLA group like this: `` ./gerrit_admin_cmd.sh set-members 'saml/sun-icla' --add admin `` and/or `` ./gerrit_admin_cmd.sh set-members 'saml/sun-ccla' --add your-lfid ``.
 - Push `All-Projects` changes: `` cd All-Projects && ../gerrit_push_all_projects_changes.sh && cd .. ``.
 
@@ -102,7 +107,7 @@ All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exportin
 - `gerrit-configured.tar` is a backup made by `./backup_gerrit.sh` while using `GETIP=1 ./ssh_into_task.sh` after all changes to `All-Projects` were pushed.
 - You can create groups manually using: `` ./gerrit_cmd.sh create-group saml/sun-ccla ``, `` ./gerrit_cmd.sh saml/create-group sun-icla `` - but this is *NOT* needed.
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
-- To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.dev.secret` file.
+- To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials) or [there](https://gerrit.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.STAGE.secret` file.
 - Then call example API via: `` ./gerrit_api_groups.sh ``.
 - More info about SAML plugin is [here](https://gerrit.googlesource.com/plugins/saml/).
 - To do some updates of `gerrit.config` do: `` GETIP=1 ./ssh_into_task.sh `` or `` ./shell_into_gerrit.sh `` - do updates `sudo vi /data/etc/gerrit.config` or `sudo vi /etc/gerrit/gerrit.config`.
