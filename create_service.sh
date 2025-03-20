@@ -49,10 +49,10 @@ then
   echo "target group ssh: ${tg2}"
   if [ -z "${NOLB}" ]
   then
-    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --load-balancers targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080 targetGroupArn=${tg2},containerName=dev_gerrit_main,containerPort=29418 > service.json.secret
+    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --load-balancers targetGroupArn=${tg},containerName=dev_gerrit_main,containerPort=8080 targetGroupArn=${tg2},containerName=dev_gerrit_main,containerPort=29418 --deployment-configuration minimumHealthyPercent=0,maximumPercent=100 > service.json.secret
     res=$?
   else
-    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command > service.json.secret
+    aws --profile lfproduct-dev ecs create-service --cluster dev_gerrit_cluster --service-name dev_gerrit_service --task-definition dev-gerrit-service --desired-count 1 --launch-type FARGATE --network-configuration "$netconf" --enable-execute-command --deployment-configuration minimumHealthyPercent=0,maximumPercent=100 > service.json.secret
     res=$?
   fi
   if [ ! "${res}" = "0" ]

@@ -5,4 +5,4 @@ then
   echo "$0: cannot find task"
   exit 1
 fi
-aws --profile lfproduct-dev ecs update-service --cluster dev_gerrit_cluster --service dev_gerrit_service --task-definition "${task}" --enable-execute-command
+aws --profile lfproduct-dev ecs update-service --cluster dev_gerrit_cluster --service dev_gerrit_service --task-definition "${task}" --enable-execute-command --deployment-configuration minimumHealthyPercent=0,maximumPercent=100
