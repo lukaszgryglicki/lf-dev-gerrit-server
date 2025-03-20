@@ -101,3 +101,5 @@ Gerrit Server for Dev use by LF
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
 - To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.secret` file.
 - Then call example API via: `` ./gerrit_api_groups.sh ``.
+- More info about SAML plugin is [here](https://gerrit.googlesource.com/plugins/saml/).
+- To do some updates of `gerrit.config` do: `` GETIP=1 ./ssh_into_task.sh `` or `` ./shell_into_gerrit.sh `` - do updates `sudo vi /data/etc/gerrit.config` or `sudo vi /etc/gerrit/gerrit.config`.
