@@ -2,7 +2,7 @@
 . ./env.sh
 if [ ! -f "vpc.json.${STAGE}.secret" ]
 then
-  aws --profile lfproduct-${STAGE} ec2 create-vpc --cidr-block 10.0.0.0/16 --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=dev_gerrit_vpc}]' > vpc.json.${STAGE}.secret
+  aws --profile lfproduct-${STAGE} ec2 create-vpc --cidr-block 10.0.0.0/16 --tag-specifications "ResourceType=vpc,Tags=[{Key=Name,Value=${STAGE}_gerrit_vpc}]" > vpc.json.${STAGE}.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

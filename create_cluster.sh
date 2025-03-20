@@ -2,7 +2,7 @@
 . ./env.sh
 if [ ! -f "cluster.json.${STAGE}.secret" ]
 then
-  aws --profile lfproduct-${STAGE} ecs create-cluster --cluster-name dev_gerrit_cluster > cluster.json.${STAGE}.secret
+  aws --profile lfproduct-${STAGE} ecs create-cluster --cluster-name ${STAGE}_gerrit_cluster > cluster.json.${STAGE}.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

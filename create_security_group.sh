@@ -10,7 +10,7 @@ then
     exit 1
   fi
   echo "VPC id: ${vpcid}"
-  aws --profile lfproduct-${STAGE} ec2 create-security-group --group-name dev_gerrit_security_group --description "Security Group for Dev Gerrit EFS" --vpc-id "${vpcid}" --tag-specifications 'ResourceType=security-group,Tags=[{Key=Name,Value=dev_gerrit_security_group}]' > security-group.json.${STAGE}.secret
+  aws --profile lfproduct-${STAGE} ec2 create-security-group --group-name ${STAGE}_gerrit_security_group --description "Security Group for ${STAGE} Gerrit EFS" --vpc-id "${vpcid}" --tag-specifications "ResourceType=security-group,Tags=[{Key=Name,Value=${STAGE}_gerrit_security_group}]" > security-group.json.${STAGE}.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then
@@ -68,7 +68,7 @@ then
     rm -f "security-group-ingress.json.${STAGE}.secret"
     exit 8
   fi
-  aws --profile lfproduct-${STAGE} ec2 describe-security-groups --filters "Name=group-name,Values=dev_gerrit_security_group" > describe-security-group.json.${STAGE}.secret
+  aws --profile lfproduct-${STAGE} ec2 describe-security-groups --filters "Name=group-name,Values=${STAGE}_gerrit_security_group" > describe-security-group.json.${STAGE}.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

@@ -7,7 +7,7 @@ then
   exit 1
 fi
 echo "service id: ${svcid}"
-aws --profile lfproduct-${STAGE} ecs delete-service --cluster dev_gerrit_cluster --service "${svcid}" --force
+aws --profile lfproduct-${STAGE} ecs delete-service --cluster ${STAGE}_gerrit_cluster --service "${svcid}" --force
 res=$?
 if [ "${res}" = "0" ]
 then

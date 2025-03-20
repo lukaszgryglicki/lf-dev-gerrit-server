@@ -1,6 +1,6 @@
 # lf-dev-gerrit-server
 
-Gerrit Server for Dev use by LF
+LF Gerrit Server
 
 All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exporting `export STAGE=dev|prod` in the current shell.
 
@@ -81,7 +81,7 @@ All commands require prefixing with `STAGE=dev` or `STAGE=prod` or just exportin
 - At this point it may happen that gerrit will already detect that you didn't sign the `CLA`, in such case check with `communitybridge/easycla`: `` DEBUG=1 ./utils/lookup_sf.sh gerrit_instances gerrit_id gerrit_id "'c64998ab-833d-4d55-8b83-04e7d3398c99'" ``.
   - Eventually lookup this instance in `SnowFlake`: `` select * from fivetran_ingest.dynamodb_product_us_east1_dev.cla_dev_gerrit_instances where gerrit_id = 'c64998ab-833d-4d55-8b83-04e7d3398c99'; ``.
   - Eventually lookup this instance in `DynamoDB`: `` ./dynamodb_get_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 ``.
-- If gerrit URL and/or Name is not correct, update like this: `` ./dynamodb_update_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 'EasyCLA Dev Gerrit' 'https://gerrit.dev.platform.linuxfoundation.org/' ``.
+- If gerrit URL and/or Name is not correct, update like this: `` ./dynamodb_update_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 'EasyCLA STAGE Gerrit' 'https://gerrit.dev.platform.linuxfoundation.org/' ``.
 - It must point to `https://gerrit.dev.platform.linuxfoundation.org` gerrit instance, use [this](https://gerrit.dev.platform.linuxfoundation.org/settings/new-agreement) to sign the CLA.
 - You can manually add user to CLA group like this: `` ./gerrit_admin_cmd.sh set-members 'saml/sun-icla' --add admin `` and/or `` ./gerrit_admin_cmd.sh set-members 'saml/sun-ccla' --add your-lfid ``.
 - Push `All-Projects` changes: `` cd All-Projects && ../gerrit_push_all_projects_changes.sh && cd .. ``.

@@ -15,7 +15,7 @@ then
 fi
 if [ ! -f "inet-gw.json.${STAGE}.secret" ]
 then
-  aws --profile lfproduct-${STAGE} ec2 create-internet-gateway --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value=dev_gerrit_internet_gw}]' > inet-gw.json.${STAGE}.secret
+  aws --profile lfproduct-${STAGE} ec2 create-internet-gateway --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=${STAGE}_gerrit_internet_gw}]" > inet-gw.json.${STAGE}.secret
   res=$?
   if [ ! "${res}" = "0" ]
   then

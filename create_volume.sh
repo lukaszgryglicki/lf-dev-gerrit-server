@@ -7,7 +7,7 @@ then
 fi
 if [ ! -f "volume-${1}.json.${STAGE}.secret" ]
 then
-  aws --profile lfproduct-${STAGE} efs create-file-system --performance-mode generalPurpose --throughput-mode bursting --tags "Key=Name,Value=dev_gerrit_${1}" > "volume-${1}.json.${STAGE}.secret"
+  aws --profile lfproduct-${STAGE} efs create-file-system --performance-mode generalPurpose --throughput-mode bursting --tags "Key=Name,Value=${STAGE}_gerrit_${1}" > "volume-${1}.json.${STAGE}.secret"
   res=$?
   if [ ! "${res}" = "0" ]
   then
@@ -16,7 +16,7 @@ then
     exit 2
   fi
   fsid=$(cat "volume-${1}.json.${STAGE}.secret" | jq -r '.FileSystemId')
-  # fsid=$(aws --profile lfproduct-${STAGE} efs describe-file-systems --query "FileSystems[?Tags[?Key=='Name' && Value=='dev_gerrit_${1}']].FileSystemId" --output text)
+  # fsid=$(aws --profile lfproduct-${STAGE} efs describe-file-systems --query "FileSystems[?Tags[?Key=='Name' && Value=='${STAGE}_gerrit_${1}']].FileSystemId" --output text)
   if [ -z "${fsid}" ]
   then
     echo "$0: cannot get file system id from volume-${1}.json.${STAGE}.secret file"
