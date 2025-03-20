@@ -40,7 +40,9 @@ Gerrit Server for Dev use by LF
 - Check if user can see `Administrators` group: `` ./gerrit_cmd.sh ls-groups ``.
 - Clone `All-Projects` repo: `` ./gerrit_clone_all_projects.sh ``.
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note UUIDs for `saml/sun-icla` and `saml/sun-ccla` groups (they get created when a new user is attempting to sign CLA).
-- Add `sun-icla` and `sun-ccla` groups to `All-Projects/groups` file, like this:
+- Those two groups names are specified in `LF-Engineering/auth0-terraform`:`src/actions/fetch_groups.js` without `saml/` prefix.
+- Also note `project CLA group` entries for `UUID` from `fetch_groups.js`, currently it is `` [PROJECTS=1] ./dynamodb_lookup_projects_cla_groups_by_cla_group_id.sh 01af041c-fa69-4052-a23c-fb8c1d3bef24 ``.
+- Add `saml/sun-icla` and `saml/sun-ccla` groups to `All-Projects/groups` file, like this:
 ```
 8e30dae6a6ce4818bf133d5429d74b69b438247b	saml/sun-ccla
 4ab34e9117f24ee290f17b22a9b23eede43b8e05	saml/sun-icla
@@ -65,7 +67,7 @@ Gerrit Server for Dev use by LF
     agreementUrl = https://api.dev.lfcla.com/v2/gerrit/c64998ab-833d-4d55-8b83-04e7d3398c99/individual/agreementUrl.html
     accepted = group saml/sun-icla
   ```
-  - TODO: note usage of `c64998ab-833d-4d55-8b83-04e7d3398c99` UUID here - this should be UUID from `DynamoDB` gerrit server instance (`gerrit-instances` table) - this is per-project gerrit server entry UUID.
+  - Note usage of `c64998ab-833d-4d55-8b83-04e7d3398c99` UUID here - this should be UUID from `DynamoDB` gerrit server instance (`gerrit-instances` table) - this is per-project gerrit server entry UUID, check: `` ./dynamodb_get_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 ``.
 - Typical changes are similar to `all-projects.diff`.
 - Install gerrit commit hooks: `` cd All-Projects && ../gerrit_commit_hooks.sh  && cd .. ``.
 - Commit `All-Projects` changes: `` cd All-Projects && ../gerrit_commit_all_projects_changes.sh && cd .. ``.
@@ -94,5 +96,6 @@ Gerrit Server for Dev use by LF
 - To reload gerrit config: `` ./gerrit_cmd.sh reload-config `` or `` ./gerrit_admin_cmd.sh reload-config ``.
 - `gerrit-saml.tar` is a backup of all persistent volumes data after `admin` user was added using "1st login mode" and then one LFID user was added by SAML auth (also admin).
 - `gerrit-configured.tar` is a backup made by `./backup_gerrit.sh` while using `GETIP=1 ./ssh_into_task.sh` after all changes to `All-Projects` were pushed.
-- Create groups: `` ./gerrit_cmd.sh create-group sun-ccla ``, `` ./gerrit_cmd.sh create-group sun-icla ``.
+- You can create groups manually using: `` ./gerrit_cmd.sh create-group saml/sun-ccla ``, `` ./gerrit_cmd.sh saml/create-group sun-icla `` - but this is *NOT* needed.
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
+- To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.secret` file.
