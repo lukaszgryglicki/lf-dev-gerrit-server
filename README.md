@@ -30,7 +30,7 @@ Gerrit Server for Dev use by LF
 - Copy-paste for example: `~/.ssh/id_rsa.pub` file.
 - Confirm that you are recognized as an admin: `` ./gerrit_admin_ssh.sh ``, it should return something like: `gerrit version 3.11.1`. This means SSH access is configured properly.
 - Confirm that there is `Administrators` group: `` ./gerrit_admin_cmd.sh ls-groups ``.
-- Put `gerrit.config` in `/data/etc/gerrit.config` using openssh `ssh` and `sftp` access, replace `{{gerrit-client-id}}` with contects of `gerrit_client_id.secret` file and `{{keystore-pwd}}` with `keystore-pwd.secret`.
+- Put `gerrit.config` in `/data/etc/gerrit.config` using openssh `ssh` and `sftp` access, replace `{{gerrit-client-id}}` with contects of `gerrit_client_id.dev.secret` file and `{{keystore-pwd}}` with `keystore-pwd.dev.secret`.
 - Redeploy gerrit server: `` ./redeploy_service.sh  ``. Wait until new task is running and the old one is not (otherwise auth mode won't be `SAML` yet). You may need to stop tasks manually or recreate service.
 - Login to gerrit again this time using `SAML LF auth0`. Then we will make that user admin too.
 - Go to [SSH Keys](https://gerrit.dev.platform.linuxfoundation.org/settings/#SSHKeys) - copy you public SSH key(s) there, so you can access the gerrit server via SSH.
@@ -99,7 +99,7 @@ Gerrit Server for Dev use by LF
 - `gerrit-configured.tar` is a backup made by `./backup_gerrit.sh` while using `GETIP=1 ./ssh_into_task.sh` after all changes to `All-Projects` were pushed.
 - You can create groups manually using: `` ./gerrit_cmd.sh create-group saml/sun-ccla ``, `` ./gerrit_cmd.sh saml/create-group sun-icla `` - but this is *NOT* needed.
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
-- To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.secret` file.
+- To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.dev.secret` file.
 - Then call example API via: `` ./gerrit_api_groups.sh ``.
 - More info about SAML plugin is [here](https://gerrit.googlesource.com/plugins/saml/).
 - To do some updates of `gerrit.config` do: `` GETIP=1 ./ssh_into_task.sh `` or `` ./shell_into_gerrit.sh `` - do updates `sudo vi /data/etc/gerrit.config` or `sudo vi /etc/gerrit/gerrit.config`.
