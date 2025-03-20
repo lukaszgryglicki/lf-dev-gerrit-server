@@ -68,6 +68,7 @@ Gerrit Server for Dev use by LF
     accepted = group saml/sun-icla
   ```
   - Note usage of `c64998ab-833d-4d55-8b83-04e7d3398c99` UUID here - this should be UUID from `DynamoDB` gerrit server instance (`gerrit-instances` table) - this is per-project gerrit server entry UUID, check: `` ./dynamodb_get_gerrit_instance.sh c64998ab-833d-4d55-8b83-04e7d3398c99 ``.
+  - Note that `project_id` returned by this call should match `project CLA group` (here: `01af041c-fa69-4052-a23c-fb8c1d3bef24`) used in `LF-Engineering/auth0-terraform`:`src/actions/fetch_groups.js`.
 - Typical changes are similar to `all-projects.diff`.
 - Install gerrit commit hooks: `` cd All-Projects && ../gerrit_commit_hooks.sh  && cd .. ``.
 - Commit `All-Projects` changes: `` cd All-Projects && ../gerrit_commit_all_projects_changes.sh && cd .. ``.
@@ -99,3 +100,4 @@ Gerrit Server for Dev use by LF
 - You can create groups manually using: `` ./gerrit_cmd.sh create-group saml/sun-ccla ``, `` ./gerrit_cmd.sh saml/create-group sun-icla `` - but this is *NOT* needed.
 - List new groups: `` ./gerrit_cmd.sh ls-groups -v `` - note their UUIDs.
 - To use HTTP API go to Settings, HTTP credentials ([here](https://gerrit.dev.platform.linuxfoundation.org/settings/#HTTPCredentials)), click "Generate new password" and paste it into `http-token.secret` file.
+- Then call example API via: `` ./gerrit_api_groups.sh ``.
